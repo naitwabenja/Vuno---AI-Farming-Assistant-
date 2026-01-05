@@ -1,0 +1,22 @@
+{
+        "name": "vuno/farming-assistant",
+            "description": "AI-powered farming assistant for East African farmers",
+                "type": "project",
+                    "require": {
+                            "php": ">=7.4",
+                                    "ext-pdo": "*",
+                                            "ext-json": "*",
+                                                    "ext-curl": "*",
+                                                            "ext-gd": "*",
+                                                                    "ext-fileinfo": "*",
+                                                                            "vlucas/phpdotenv": "^5.5"
+                                                                                },
+                                                                                    "autoload": {
+                                                                                            "psr-4": {
+                                                                                                        "Vuno\\": "src/"
+                                                                                                                }
+                                                                                                                    },
+                                                                                                                        "config": {
+                                                                                                                                "optimize-autoloader": true
+                                                                                                                                    }
+                                                                                                                                    }

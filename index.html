@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vuno - AI Farming Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-green: #2E8B57;
+            --light-green: #3CB371;
+            --dark-green: #228B22;
+            --soil-brown: #8B7355;
+            --sun-yellow: #FFD700;
+            --sky-blue: #87CEEB;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            background-color: var(--dark-green);
+            padding: 8px 0;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .language-selector button {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 4px 12px;
+            margin: 0 5px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .language-selector button.active {
+            background-color: var(--sun-yellow);
+            color: var(--dark-green);
+            border-color: var(--sun-yellow);
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: white;
+            padding: 20px 15px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+            color: var(--sun-yellow);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo-subtext {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .user-profile {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .welcome-message {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Weather Banner */
+        .weather-banner {
+            background: linear-gradient(to right, var(--sky-blue), #98FB98);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .weather-icon {
+            font-size: 36px;
+            color: var(--sun-yellow);
+        }
+        
+        .weather-text h3 {
+            margin-bottom: 5px;
+            color: var(--dark-green);
+        }
+        
+        .weather-text p {
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+        
+        .weather-actions {
+            font-size: 14px;
+            color: var(--dark-green);
+            font-weight: 600;
+        }
+        
+        /* Quick Actions Grid */
+        .section-title {
+            font-size: 18px;
+            margin: 25px 0 15px;
+            color: var(--dark-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--primary-green);
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .action-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-icon {
+            font-size: 32px;
+            color: var(--primary-green);
+            margin-bottom: 12px;
+        }
+        
+        .action-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        
+        .action-desc {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+        
+        /* Chat Assistant */
+        .chat-assistant {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-header-title i {
+            font-size: 20px;
+        }
+        
+        .chat-messages {
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+        
+        .message-ai {
+            background-color: #E8F5E9;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message-user {
+            background-color: var(--primary-green);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #EEEEEE;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #DDDDDD;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        
+        .chat-input:focus {
+            border-color: var(--primary-green);
+        }
+        
+        .chat-send-button {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .chat-send-button:hover {
+            background-color: var(--dark-green);
+        }
+        
+        .quick-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .quick-question {
+            background-color: #F0F8F0;
+            border: 1px solid #C8E6C9;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            color: var(--dark-green);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .quick-question:hover {
+            background-color: #E0F2E0;
+        }
+        
+        /* Market Prices */
+        .market-prices {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .market-refresh {
+            background-color: var(--light-green);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .price-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #EEEEEE;
+        }
+        
+        .price-item:last-child {
+            border-bottom: none;
+        }
+        
+        .crop-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .crop-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #E8F5E9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-green);
+            font-size: 20px;
+        }
+        
+        .price-amount {
+            font-weight: 700;
+            color: var(--dark-green);
+            font-size: 18px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-green);
+            color: white;
+            padding: 25px 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        .footer-contact {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 20px;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+        }
+        
+        .loading i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--primary-green);
+        }
+        
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Vuno Logo Styling */
+        .vuno-logo {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .vuno-logo .logo-icon {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .vuno-logo::after {
+            content: "";
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: var(--sun-yellow);
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            z-index: 1;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <span>Language: </span>
+        <button class="active" id="btn-english">English</button>
+        <button id="btn-swahili">Swahili</button>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <div class="vuno-logo">
+                    <i class="fas fa-seedling logo-icon"></i>
+                </div>
+                <div>
+                    <div class="logo-text">Vuno</div>
+                    <div class="logo-subtext">AI Farming Assistant</div>
+                </div>
+            </div>
+            <div class="user-profile" id="user-profile">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+        <div class="welcome-message" id="welcome-message">Welcome, John! Ready for today's farming?</div>
+        <div class="location-info">
+            <i class="fas fa-map-marker-alt"></i>
+            <span id="location-text">Murang'a County, Kenya</span>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Weather Banner -->
+        <section class="weather-banner fade-in">
+            <div class="weather-info">
+                <i class="fas fa-sun weather-icon"></i>
+                <div class="weather-text">
+                    <h3>Good Weather for Planting</h3>
+                    <p>Temperature: 24°C | Rain expected in 2 days | Soil moisture: Optimal</p>
+                </div>
+            </div>
+            <div class="weather-actions">
+                <i class="fas fa-cloud-rain"></i> 70% chance tomorrow
+            </div>
+        </section>
+        
+        <!-- Quick Actions -->
+        <h2 class="section-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+        <div class="quick-actions">
+            <div class="action-card" id="action-planting">
+                <i class="fas fa-calendar-alt action-icon"></i>
+                <div class="action-title">Planting Advice</div>
+                <div class="action-desc">When to plant crops based on weather</div>
+            </div>
+            
+            <div class="action-card" id="action-disease">
+                <i class="fas fa-bug action-icon"></i>
+                <div class="action-title">Disease Diagnosis</div>
+                <div class="action-desc">Identify plant diseases from photos</div>
+            </div>
+            
+            <div class="action-card" id="action-market">
+                <i class="fas fa-chart-line action-icon"></i>
+                <div class="action-title">Market Prices</div>
+                <div class="action-desc">Latest crop prices in nearby markets</div>
+            </div>
+            
+            <div class="action-card" id="action-resources">
+                <i class="fas fa-calculator action-icon"></i>
+                <div class="action-title">Resource Calculator</div>
+                <div class="action-desc">Calculate seeds, water & fertilizer</div>
+            </div>
+        </div>
+        
+        <!-- AI Chat Assistant -->
+        <section class="chat-assistant fade-in">
+            <div class="chat-header">
+                <div class="chat-header-title">
+                    <i class="fas fa-robot"></i>
+                    <span>Ask Vuno Assistant</span>
+                </div>
+                <div class="chat-options">
+                    <i class="fas fa-microphone" id="voice-toggle" title="Voice Input"></i>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="message message-ai">
+                    <strong>Vuno Assistant:</strong> Hello! I'm your AI farming assistant. How can I help you today? You can ask about planting, diseases, market prices, or anything else about farming.
+                </div>
+                <div class="message message-user">
+                    When should I plant maize in Murang'a?
+                </div>
+                <div class="message message-ai">
+                    <strong>Vuno Assistant:</strong> Based on current weather patterns, the optimal time to plant maize in Murang'a is in the next 2 weeks. The soil temperature is ideal, and rainfall is expected. Prepare your land now and plant before the heavy rains.
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Type your farming question here...">
+                <button class="chat-send-button" id="chat-send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            
+            <div class="quick-questions">
+                <div class="quick-question" data-question="When to plant tomatoes?">When to plant tomatoes?</div>
+                <div class="quick-question" data-question="Why are my maize leaves turning yellow?">Why are my maize leaves turning yellow?</div>
+                <div class="quick-question" data-question="Best fertilizer for beans?">Best fertilizer for beans?</div>
+                <div class="quick-question" data-question="Tomato price in Nakuru?">Tomato price in Nakuru?</div>
+            </div>
+        </section>
+        
+        <!-- Market Prices -->
+        <section class="market-prices fade-in">
+            <div class="market-header">
+                <h2 class="section-title" style="margin: 0;"><i class="fas fa-shopping-basket"></i> Today's Market Prices</h2>
+                <button class="market-refresh" id="refresh-prices">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+            
+            <div class="price-list" id="price-list">
+                <div class="price-item">
+                    <div class="crop-info">
+                        <div class="crop-icon">
+                            <i class="fas fa-apple-alt"></i>
+                        </div>
+                        <div>
+                            <div class="crop-name">Tomatoes</div>
+                            <div class="crop-market">Nakuru Market</div>
+                        </div>
+                    </div>
+                    <div class="price-amount">KES 180/kg</div>
+                </div>
+                
+                <div class="price-item">
+                    <div class="crop-info">
+                        <div class="crop-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div>
+                            <div class="crop-name">Maize</div>
+                            <div class="crop-market">Murang'a Market</div>
+                        </div>
+                    </div>
+                    <div class="price-amount">KES 65/kg</div>
+                </div>
+                
+                <div class="price-item">
+                    <div class="crop-info">
+                        <div class="crop-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div>
+                            <div class="crop-name">Kale (Sukuma Wiki)</div>
+                            <div class="crop-market">Nairobi Market</div>
+                        </div>
+                    </div>
+                    <div class="price-amount">KES 40/bunch</div>
+                </div>
+                
+                <div class="price-item">
+                    <div class="crop-info">
+                        <div class="crop-icon">
+                            <i class="fas fa-carrot"></i>
+                        </div>
+                        <div>
+                            <div class="crop-name">Potatoes</div>
+                            <div class="crop-market">Eldoret Market</div>
+                        </div>
+                    </div>
+                    <div class="price-amount">KES 120/kg</div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="footer-link">About Vuno</a>
+            <a href="#" class="footer-link">Contact Support</a>
+            <a href="#" class="footer-link">Farming Tips</a>
+            <a href="#" class="footer-link">Weather Forecast</a>
+            <a href="#" class="footer-link">USSD Code: *384*858#</a>
+        </div>
+        <div class="footer-contact">
+            <p><i class="fas fa-phone"></i> Call: 0800 724 646 (Toll-free)</p>
+            <p><i class="fas fa-comment"></i> WhatsApp: +254 700 123 456</p>
+            <p>© 2024 Vuno AI. Empowering East African Farmers.</p>
+        </div>
+    </footer>
+    
+    <!-- Disease Diagnosis Modal -->
+    <div class="modal" id="disease-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-bug"></i> Disease Diagnosis</h2>
+                <button class="modal-close" id="close-disease-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Upload a photo of your sick plant for diagnosis:</p>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="border: 2px dashed #CCC; border-radius: 12px; padding: 30px; margin-bottom: 15px;">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #AAA; margin-bottom: 15px;"></i>
+                        <p>Drag & drop plant photo here</p>
+                        <p style="font-size: 14px; color: #666;">or</p>
+                        <button id="upload-photo-btn" style="background-color: var(--primary-green); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 10px;">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                        <button id="browse-photo-btn" style="background-color: var(--sky-blue); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 10px; margin-left: 10px;">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                    </div>
+                    
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Or describe symptoms:</p>
+                    <textarea id="symptoms-text" placeholder="Describe the symptoms you're seeing on your plants..." style="width: 100%; padding: 12px; border: 1px solid #DDD; border-radius: 8px; min-height: 100px; margin-bottom: 15px;"></textarea>
+                    
+                    <button id="diagnose-btn" style="background-color: var(--dark-green); color: white; border: none; padding: 12px 30px; border-radius: 24px; font-size: 16px; cursor: pointer; width: 100%;">
+                        <i class="fas fa-search"></i> Diagnose Problem
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Planting Advice Modal -->
+    <div class="modal" id="planting-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-calendar-alt"></i> Planting Advice</h2>
+                <button class="modal-close" id="close-planting-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Get personalized planting advice for your location:</p>
+                
+                <div style="margin: 20px 0;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Select Crop:</label>
+                    <select id="crop-select" style="width: 100%; padding: 12px; border: 1px solid #DDD; border-radius: 8px; margin-bottom: 20px;">
+                        <option value="maize">Maize</option>
+                        <option value="beans">Beans</option>
+                        <option value="tomatoes">Tomatoes</option>
+                        <option value="potatoes">Potatoes</option>
+                        <option value="kale">Kale (Sukuma Wiki)</option>
+                        <option value="cabbage">Cabbage</option>
+                        <option value="onions">Onions</option>
+                        <option value="carrots">Carrots</option>
+                    </select>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Plot Size (acres):</label>
+                            <input type="number" id="plot-size" value="0.5" min="0.1" step="0.1" style="width: 100%; padding: 12px; border: 1px solid #DDD; border-radius: 8px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Soil Type:</label>
+                            <select id="soil-type" style="width: 100%; padding: 12px; border: 1px solid #DDD; border-radius: 8px;">
+                                <option value="clay">Clay</option>
+                                <option value="loam">Loam</option>
+                                <option value="sandy">Sandy</option>
+                                <option value="clay_loam">Clay Loam</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="get-advice-btn" style="background-color: var(--dark-green); color: white; border: none; padding: 12px 30px; border-radius: 24px; font-size: 16px; cursor: pointer; width: 100%;">
+                        <i class="fas fa-seedling"></i> Get Planting Advice
+                    </button>
+                </div>
+                
+                <div id="advice-result" class="hidden" style="background-color: #E8F5E9; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                    <h3 style="color: var(--dark-green); margin-bottom: 10px;">Planting Advice for Maize</h3>
+                    <p><strong>Optimal Planting Date:</strong> Next 2 weeks (before heavy rains)</p>
+                    <p><strong>Seed Quantity:</strong> 10 kg for 0.5 acres</p>
+                    <p><strong>Fertilizer Recommendation:</strong> 50 kg CAN, 25 kg DAP</p>
+                    <p><strong>Spacing:</strong> 75cm between rows, 30cm between plants</p>
+                    <p><strong>Expected Harvest:</strong> 8-10 bags (90kg each)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Resource Calculator Modal -->
+    <div class="modal" id="calculator-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-calculator"></i> Resource Calculator</h2>
+                <button class="modal-close" id="close-calculator-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Calculate resources needed for your farm:</p>
+                
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Plot Size (acres):</label>
+                            <input type="number" id="calc-plot-size" value="1" min="0.1" step="0.1" style="width: 100%; padding: 12px; border: 1px solid #DDD; border-radius: 8px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Crop:</label>
+                            <select id="calc-crop-select" style="width: 100%; padding: 12px; border: 1px solid #DDD; border-radius: 8px;">
+                                <option value="maize">Maize</option>
+                                <option value="beans">Beans</option>
+                                <option value="tomatoes">Tomatoes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Resource Type:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="resource-type-btn active" data-type="water">Water</button>
+                            <button class="resource-type-btn" data-type="seeds">Seeds</button>
+                            <button class="resource-type-btn" data-type="fertilizer">Fertilizer</button>
+                            <button class="resource-type-btn" data-type="all">All</button>
+                        </div>
+                    </div>
+                    
+                    <button id="calculate-btn" style="background-color: var(--dark-green); color: white; border: none; padding: 12px 30px; border-radius: 24px; font-size: 16px; cursor: pointer; width: 100%;">
+                        <i class="fas fa-calculator"></i> Calculate Resources
+                    </button>
+                </div>
+                
+                <div id="calculator-result" class="hidden" style="background-color: #E8F5E9; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                    <h3 style="color: var(--dark-green); margin-bottom: 10px;">Resource Calculation for 1 acre of Maize</h3>
+                    <p><strong>Seeds:</strong> 20 kg (2 bags)</p>
+                    <p><strong>Fertilizer:</strong> 100 kg CAN, 50 kg DAP</p>
+                    <p><strong>Water:</strong> 5000 liters per week (dry season)</p>
+                    <p><strong>Labor:</strong> 8 person-days for planting</p>
+                    <p><strong>Estimated Cost:</strong> KES 15,000</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Modal -->
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user"></i> Farmer Profile</h2>
+                <button class="modal-close" id="close-profile-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="background-color: var(--primary-green); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 15px;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 id="farmer-name">John Kimani</h3>
+                    <p style="color: #666;">Murang'a County, Kenya</p>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <div style="background-color: #F5F5F5; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <h4 style="color: var(--dark-green); margin-bottom: 10px;"><i class="fas fa-tractor"></i> Farm Details</h4>
+                        <p><strong>Farm Size:</strong> 2.5 acres</p>
+                        <p><strong>Main Crops:</strong> Maize, Beans, Kale</p>
+                        <p><strong>Soil Type:</strong> Loam</p>
+                    </div>
+                    
+                    <div style="background-color: #F5F5F5; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <h4 style="color: var(--dark-green); margin-bottom: 10px;"><i class="fas fa-phone"></i> Contact Information</h4>
+                        <p><strong>Phone:</strong> +254 712 345 678</p>
+                        <p><strong>Preferred Language:</strong> English & Swahili</p>
+                        <p><strong>Joined:</strong> March 2024</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="edit-profile-btn" style="background-color: var(--primary-green); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-right: 10px;">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                        <button id="logout-btn" style="background-color: #FF6B6B; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const quickQuestions = document.querySelectorAll('.quick-question');
+        const actionCards = document.querySelectorAll('.action-card');
+        const modals = document.querySelectorAll('.modal');
+        const languageButtons = document.querySelectorAll('.language-selector button');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const userProfile = document.getElementById('user-profile');
+        const refreshPrices = document.getElementById('refresh-prices');
+        const priceList = document.getElementById('price-list');
+        
+        // Modal Elements
+        const diseaseModal = document.getElementById('disease-modal');
+        const plantingModal = document.getElementById('planting-modal');
+        const calculatorModal = document.getElementById('calculator-modal');
+        const profileModal = document.getElementById('profile-modal');
+        
+        // Close buttons for modals
+        document.getElementById('close-disease-modal').addEventListener('click', () => hideModal(diseaseModal));
+        document.getElementById('close-planting-modal').addEventListener('click', () => hideModal(plantingModal));
+        document.getElementById('close-calculator-modal').addEventListener('click', () => hideModal(calculatorModal));
+        document.getElementById('close-profile-modal').addEventListener('click', () => hideModal(profileModal));
+        
+        // Close modal when clicking outside
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    hideModal(modal);
+                }
+            });
+        });
+        
+        // Language switching
+        languageButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Update content based on language
+                if (button.id === 'btn-swahili') {
+                    // Switch to Swahili
+                    welcomeMessage.textContent = 'Karibu, John! Tayari kwa kilimo cha leo?';
+                    document.getElementById('location-text').textContent = 'Kaunti ya Murang\'a, Kenya';
+                    chatInput.placeholder = 'Andika swali lako la kilimo hapa...';
+                    document.querySelector('.logo-text').textContent = 'Vuno';
+                    document.querySelector('.logo-subtext').textContent = 'Msaada wa Kilimo wa AI';
+                    document.querySelector('.chat-header-title span').textContent = 'Uliza Msaada wa Vuno';
+                    
+                    // Update action cards
+                    document.querySelector('#action-planting .action-title').textContent = 'Ushauri wa Kupanda';
+                    document.querySelector('#action-planting .action-desc').textContent = 'Wakati wa kupanda mimea kulingana na hali ya hewa';
+                    
+                    document.querySelector('#action-disease .action-title').textContent = 'Uchunguzi wa Magonjwa';
+                    document.querySelector('#action-disease .action-desc').textContent = 'Tambua magonjwa ya mimea kutoka kwa picha';
+                    
+                    document.querySelector('#action-market .action-title').textContent = 'Bei za Soko';
+                    document.querySelector('#action-market .action-desc').textContent = 'Bei za hivi punde za mazao sokoni';
+                    
+                    document.querySelector('#action-resources .action-title').textContent = 'Kikokotoo cha Rasilimali';
+                    document.querySelector('#action-resources .action-desc').textContent = 'Hesabu mbegu, maji na mbolea';
+                    
+                    // Update quick questions
+                    const questions = document.querySelectorAll('.quick-question');
+                    questions[0].textContent = 'Ni lini kupanda nyanya?';
+                    questions[1].textContent = 'Kwa nini majani ya mahindi yanageuka manjano?';
+                    questions[2].textContent = 'Mbolea bora kwa maharagwe?';
+                    questions[3].textContent = 'Bei ya nyanya Nakuru?';
+                    
+                    // Update footer
+                    document.querySelectorAll('.footer-link')[0].textContent = 'Kuhusu Vuno';
+                    document.querySelectorAll('.footer-link')[1].textContent = 'Wasiliana na Usaidizi';
+                    document.querySelectorAll('.footer-link')[2].textContent = 'Vidokezo vya Kilimo';
+                    document.querySelectorAll('.footer-link')[3].textContent = 'Utabiri wa Hali ya Hewa';
+                    document.querySelector('.footer-contact p:last-child').textContent = '© 2024 Vuno AI. Kuwawezesha Wakulima wa Afrika Mashariki.';
+                    
+                } else {
+                    // Switch to English
+                    welcomeMessage.textContent = 'Welcome, John! Ready for today\'s farming?';
+                    document.getElementById('location-text').textContent = 'Murang\'a County, Kenya';
+                    chatInput.placeholder = 'Type your farming question here...';
+                    document.querySelector('.logo-text').textContent = 'Vuno';
+                    document.querySelector('.logo-subtext').textContent = 'AI Farming Assistant';
+                    document.querySelector('.chat-header-title span').textContent = 'Ask Vuno Assistant';
+                    
+                    // Update action cards
+                    document.querySelector('#action-planting .action-title').textContent = 'Planting Advice';
+                    document.querySelector('#action-planting .action-desc').textContent = 'When to plant crops based on weather';
+                    
+                    document.querySelector('#action-disease .action-title').textContent = 'Disease Diagnosis';
+                    document.querySelector('#action-disease .action-desc').textContent = 'Identify plant diseases from photos';
+                    
+                    document.querySelector('#action-market .action-title').textContent = 'Market Prices';
+                    document.querySelector('#action-market .action-desc').textContent = 'Latest crop prices in nearby markets';
+                    
+                    document.querySelector('#action-resources .action-title').textContent = 'Resource Calculator';
+                    document.querySelector('#action-resources .action-desc').textContent = 'Calculate seeds, water & fertilizer';
+                    
+                    // Update quick questions
+                    const questions = document.querySelectorAll('.quick-question');
+                    questions[0].textContent = 'When to plant tomatoes?';
+                    questions[1].textContent = 'Why are my maize leaves turning yellow?';
+                    questions[2].textContent = 'Best fertilizer for beans?';
+                    questions[3].textContent = 'Tomato price in Nakuru?';
+                    
+                    // Update footer
+                    document.querySelectorAll('.footer-link')[0].textContent = 'About Vuno';
+                    document.querySelectorAll('.footer-link')[1].textContent = 'Contact Support';
+                    document.querySelectorAll('.footer-link')[2].textContent = 'Farming Tips';
+                    document.querySelectorAll('.footer-link')[3].textContent = 'Weather Forecast';
+                    document.querySelector('.footer-contact p:last-child').textContent = '© 2024 Vuno AI. Empowering East African Farmers.';
+                }
+            });
+        });
+        
+        // Action card click handlers
+        document.getElementById('action-planting').addEventListener('click', () => showModal(plantingModal));
+        document.getElementById('action-disease').addEventListener('click', () => showModal(diseaseModal));
+        document.getElementById('action-market').addEventListener('click', () => {
+            // Scroll to market prices section
+            document.querySelector('.market-prices').scrollIntoView({ behavior: 'smooth' });
+        });
+        document.getElementById('action-resources').addEventListener('click', () => showModal(calculatorModal));
+        
+        // Profile icon click
+        userProfile.addEventListener('click', () => showModal(profileModal));
+        
+        // Chat functionality
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Quick question click handlers
+        quickQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const questionText = question.getAttribute('data-question');
+                addMessage(questionText, 'user');
+                chatInput.value = '';
+                
+                // Simulate AI response after delay
+                setTimeout(() => {
+                    const responses = [
+                        "For tomatoes, the best planting time in your region is at the start of the rainy season. Prepare raised beds with well-draining soil and plant seedlings 45-60cm apart.",
+                        "Yellowing maize leaves could indicate nitrogen deficiency, waterlogging, or maize streak virus. Apply nitrogen fertilizer if deficiency, improve drainage, and remove infected plants if virus is suspected.",
+                        "For beans, use DAP fertilizer at planting (50kg/acre) and top-dress with CAN after 3 weeks. Organic options include well-decomposed manure or compost.",
+                        "Tomatoes are currently selling at KES 180-220 per kg in Nakuru market. Prices are expected to rise in the next week due to reduced supply."
+                    ];
+                    
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, 'ai');
+                }, 1000);
+            });
+        });
+        
+        // Refresh market prices
+        refreshPrices.addEventListener('click', () => {
+            refreshPrices.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing...';
+            refreshPrices.disabled = true;
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Update prices with random variations
+                const priceElements = document.querySelectorAll('.price-amount');
+                priceElements.forEach(el => {
+                    const currentPrice = parseInt(el.textContent.replace(/[^\d]/g, ''));
+                    const change = Math.floor(Math.random() * 41) - 20; // -20 to +20
+                    const newPrice = Math.max(currentPrice + change, 30);
+                    el.textContent = `KES ${newPrice}/kg`;
+                });
+                
+                refreshPrices.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+                refreshPrices.disabled = false;
+                
+                // Show notification
+                showNotification('Market prices updated successfully!');
+            }, 1500);
+        });
+        
+        // Modal button handlers
+        document.getElementById('diagnose-btn').addEventListener('click', () => {
+            const symptoms = document.getElementById('symptoms-text').value;
+            if (symptoms.trim() === '') {
+                alert('Please describe symptoms or upload a photo');
+                return;
+            }
+            
+            document.getElementById('diagnose-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            document.getElementById('diagnose-btn').disabled = true;
+            
+            // Simulate analysis
+            setTimeout(() => {
+                document.getElementById('diagnose-btn').innerHTML = '<i class="fas fa-search"></i> Diagnose Problem';
+                document.getElementById('diagnose-btn').disabled = false;
+                
+                // Show result in chat
+                hideModal(diseaseModal);
+                addMessage("I've analyzed the symptoms. My plant has brown spots on leaves and some are wilting.", 'user');
+                
+                setTimeout(() => {
+                    addMessage("Based on your description, this appears to be Early Blight in tomatoes. Organic treatment: 1) Remove infected leaves, 2) Spray with baking soda solution (1 tbsp per liter of water), 3) Improve air circulation, 4) Water at the base, not on leaves. Apply copper-based fungicide if available.", 'ai');
+                }, 800);
+            }, 2000);
+        });
+        
+        document.getElementById('get-advice-btn').addEventListener('click', () => {
+            const crop = document.getElementById('crop-select').value;
+            const plotSize = document.getElementById('plot-size').value;
+            const soilType = document.getElementById('soil-type').value;
+            
+            document.getElementById('get-advice-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Advice...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                document.getElementById('get-advice-btn').innerHTML = '<i class="fas fa-seedling"></i> Get Planting Advice';
+                
+                // Update advice result
+                const adviceResult = document.getElementById('advice-result');
+                adviceResult.querySelector('h3').textContent = `Planting Advice for ${crop.charAt(0).toUpperCase() + crop.slice(1)}`;
+                adviceResult.classList.remove('hidden');
+                
+                // Scroll to result
+                adviceResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 1500);
+        });
+        
+        // Resource calculator
+        document.querySelectorAll('.resource-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.resource-type-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        document.getElementById('calculate-btn').addEventListener('click', () => {
+            const plotSize = document.getElementById('calc-plot-size').value;
+            const crop = document.getElementById('calc-crop-select').value;
+            const resourceType = document.querySelector('.resource-type-btn.active').getAttribute('data-type');
+            
+            document.getElementById('calculate-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calculating...';
+            
+            // Simulate calculation
+            setTimeout(() => {
+                document.getElementById('calculate-btn').innerHTML = '<i class="fas fa-calculator"></i> Calculate Resources';
+                
+                // Update calculator result
+                const calculatorResult = document.getElementById('calculator-result');
+                calculatorResult.querySelector('h3').textContent = `Resource Calculation for ${plotSize} acre${plotSize == 1 ? '' : 's'} of ${crop.charAt(0).toUpperCase() + crop.slice(1)}`;
+                calculatorResult.classList.remove('hidden');
+                
+                // Scroll to result
+                calculatorResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 1200);
+        });
+        
+        // Profile modal buttons
+        document.getElementById('edit-profile-btn').addEventListener('click', () => {
+            alert('Edit profile functionality would open a form here in a real application.');
+        });
+        
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('You have been logged out. In a real app, this would redirect to login.');
+                hideModal(profileModal);
+            }
+        });
+        
+        // Voice toggle
+        document.getElementById('voice-toggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (this.classList.contains('active')) {
+                this.style.color = 'var(--sun-yellow)';
+                showNotification('Voice input activated. Click again to turn off.');
+            } else {
+                this.style.color = 'white';
+                showNotification('Voice input deactivated.');
+            }
+        });
+        
+        // Upload photo buttons
+        document.getElementById('upload-photo-btn').addEventListener('click', () => {
+            alert('Camera would open here on a mobile device');
+        });
+        
+        document.getElementById('browse-photo-btn').addEventListener('click', () => {
+            alert('File browser would open here');
+        });
+        
+        // Helper Functions
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+            
+            addMessage(message, 'user');
+            chatInput.value = '';
+            
+            // Simulate AI response after delay
+            setTimeout(() => {
+                simulateAIResponse(message);
+            }, 1000);
+        }
+        
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${sender}`;
+            messageDiv.innerHTML = `<strong>${sender === 'ai' ? 'Vuno Assistant:' : 'You:'}</strong> ${text}`;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add fade-in animation
+            setTimeout(() => {
+                messageDiv.classList.add('fade-in');
+            }, 10);
+        }
+        
+        function simulateAIResponse(question) {
+            // Simple keyword-based responses for demo
+            let response = "I understand you're asking about farming. For more specific advice, please provide more details about your location, crop, and specific concerns.";
+            
+            const lowerQuestion = question.toLowerCase();
+            
+            if (lowerQuestion.includes('plant') || lowerQuestion.includes('planting')) {
+                if (lowerQuestion.includes('maize') || lowerQuestion.includes('corn')) {
+                    response = "For maize planting in your area: Optimal time is with the onset of rains. Use certified seeds, plant at depth of 2-5cm, spacing 75x30cm. Apply DAP fertilizer at planting (50kg/acre) and top-dress with CAN after 3-4 weeks.";
+                } else if (lowerQuestion.includes('tomato')) {
+                    response = "Tomatoes need well-drained soil with pH 6.0-6.8. Plant seedlings 45-60cm apart. Stake plants for support. Water regularly at the base, avoid wetting leaves. Harvest starts 60-80 days after planting.";
+                }
+            } else if (lowerQuestion.includes('disease') || lowerQuestion.includes('sick') || lowerQuestion.includes('yellow')) {
+                response = "For disease diagnosis, please upload a clear photo of the affected plant or describe symptoms in detail (leaf color changes, spots, wilting, etc.). Common issues: fungal diseases (use copper-based fungicide), nutrient deficiencies (apply appropriate fertilizer), or pest attacks (neem oil solution).";
+            } else if (lowerQuestion.includes('price') || lowerQuestion.includes('market')) {
+                response = "Current average prices in your region: Tomatoes KES 180-220/kg, Maize KES 65-75/kg, Kale KES 35-50/bunch, Potatoes KES 110-130/kg. Prices vary by market and quality. Check the Market Prices section for live updates.";
+            } else if (lowerQuestion.includes('water') || lowerQuestion.includes('irrigation')) {
+                response = "Water needs vary by crop and growth stage. Generally: 1) Water early morning or late evening, 2) Apply 2-3cm water per week for most crops, 3) Use drip irrigation or watering cans at plant base, 4) Mulch to retain soil moisture. For specific advice, use the Resource Calculator.";
+            } else if (lowerQuestion.includes('fertilizer') || lowerQuestion.includes('manure')) {
+                response = "Organic options: Well-decomposed manure (10-20 tons/acre), compost, green manure crops. Chemical fertilizers: DAP for planting, CAN or Urea for top-dressing. Soil testing recommended for precise recommendations. Use the Resource Calculator for quantities based on your plot size.";
+            }
+            
+            addMessage(response, 'ai');
+        }
+        
+        function showModal(modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideModal(modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: var(--dark-green);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 24px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-size: 14px;
+                animation: fadeIn 0.3s;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Initialize with some sample messages
+        setTimeout(() => {
+            // Simulate initial system message
+            addMessage("I can see it's sunny in Murang'a today. Good day for weeding and checking your crops for pests. How can I assist you with your farming today?", 'ai');
+        }, 2000);
+        
+        // Add click animation to action cards
+        actionCards.forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

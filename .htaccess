@@ -1,0 +1,23 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE application/json
+        AddOutputFilterByType DEFLATE text/html
+            AddOutputFilterByType DEFLATE text/css
+                AddOutputFilterByType DEFLATE text/javascript
+                </IfModule>
+
+                # Cache control
+                <FilesMatch "\.(ico|jpg|jpeg|png|gif|js|css|swf)$">
+                    Header set Cache-Control "max-age=86400, public"
+                    </FilesMatch>

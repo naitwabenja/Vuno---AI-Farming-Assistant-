@@ -1,0 +1,299 @@
+/* Enhanced styles for JavaScript features */
+
+/* Voice recording animation */
+.voice-recording {
+    animation: pulse 1.5s infinite;
+    color: #e74c3c !important;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Offline indicator */
+.offline-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #f39c12;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Camera preview */
+#camera-modal video {
+    background: #000;
+    border-radius: 8px;
+    transform: scaleX(-1); /* Mirror for selfie camera */
+}
+
+/* Image preview */
+.image-preview {
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+/* Progress bar for uploads */
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-green);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Toast notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background: white;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideInRight 0.3s ease-out;
+    max-width: 300px;
+}
+
+.toast-success {
+    border-left: 4px solid var(--primary-green);
+}
+
+.toast-error {
+    border-left: 4px solid #e74c3c;
+}
+
+.toast-warning {
+    border-left: 4px solid #f39c12;
+}
+
+.toast-info {
+    border-left: 4px solid var(--sky-blue);
+}
+
+/* Swipe actions for mobile */
+.swipeable {
+    position: relative;
+    overflow: hidden;
+}
+
+.swipe-actions {
+    position: absolute;
+    top: 0;
+    right: -100px;
+    bottom: 0;
+    display: flex;
+    transition: right 0.3s ease;
+}
+
+.swipeable.swiping .swipe-actions {
+    right: 0;
+}
+
+.swipe-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    color: white;
+}
+
+.swipe-action.delete {
+    background: #e74c3c;
+}
+
+.swipe-action.archive {
+    background: #f39c12;
+}
+
+/* Pull to refresh */
+.pull-to-refresh {
+    position: fixed;
+    top: -60px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-green);
+    color: white;
+    transition: top 0.3s ease;
+    z-index: 1000;
+}
+
+.pull-to-refresh.active {
+    top: 0;
+}
+
+/* Network quality indicator */
+.network-quality {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    z-index: 1000;
+}
+
+.network-good {
+    background: var(--primary-green);
+}
+
+.network-poor {
+    background: #f39c12;
+}
+
+.network-bad {
+    background: #e74c3c;
+}
+
+/* Data saver mode */
+.data-saver .image {
+    filter: blur(2px);
+}
+
+.data-saver .image.loaded {
+    filter: none;
+}
+
+/* Keyboard shortcuts help */
+.keyboard-shortcuts {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 300px;
+    z-index: 1000;
+    display: none;
+}
+
+.keyboard-shortcuts.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Voice command feedback */
+.voice-feedback {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.voice-level {
+    width: 4px;
+    background: white;
+    border-radius: 2px;
+    animation: voicePulse 0.5s infinite alternate;
+}
+
+@keyframes voicePulse {
+    from { height: 5px; }
+    to { height: 20px; }
+}
+
+/* Accessibility features */
+.high-contrast {
+    filter: contrast(1.2);
+}
+
+.text-large {
+    font-size: 18px !important;
+}
+
+.text-xlarge {
+    font-size: 22px !important;
+}
+
+/* Animation for new messages */
+.message.new {
+    animation: highlight 1s ease;
+}
+
+@keyframes highlight {
+    0% { background-color: rgba(46, 139, 87, 0.1); }
+    100% { background-color: transparent; }
+}
+
+/* Skeleton loading */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
