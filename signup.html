@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your Vuno account and start your AI-powered farming journey">
+    <title>Sign Up - Vuno Farming Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-box">
+            <!-- Header -->
+            <div class="auth-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>Vuno</span>
+                </a>
+                <h1>Create Account</h1>
+                <p>Join thousands of successful farmers using Vuno</p>
+            </div>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form" method="POST" action="AuthController.php">
+                <input type="hidden" name="action" value="signup">
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+                    <span class="error-message" id="fullNameError"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="your@email.com"
+                            required
+                        >
+                    </div>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone"></i>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            placeholder="+254 7XX XXX XXX"
+                            required
+                        >
+                    </div>
+                    <span class="error-message" id="phoneError"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Create a strong password"
+                            required
+                        >
+                        <i class="fas fa-eye toggle-password" data-target="password"></i>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                    <div class="password-strength">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <p class="password-requirements">
+                        <small>Password must be at least 8 characters with uppercase, lowercase, and numbers</small>
+                    </p>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            placeholder="Re-enter your password"
+                            required
+                        >
+                        <i class="fas fa-eye toggle-password" data-target="confirmPassword"></i>
+                    </div>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-group checkbox">
+                    <input 
+                        type="checkbox" 
+                        id="terms" 
+                        name="terms" 
+                        required
+                    >
+                    <label for="terms">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                    <span class="error-message" id="termsError"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary btn-full">
+                    <span id="submitText">Create Account</span>
+                    <i class="fas fa-spinner fa-spin" id="submitSpinner" style="display: none; margin-left: 8px;"></i>
+                </button>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Account created successfully! Redirecting to login...</span>
+                </div>
+
+                <!-- Server Error Message -->
+                <div class="error-box" id="serverError" style="display: none;"></div>
+            </form>
+
+            <!-- Login Link -->
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Log In</a></p>
+            </div>
+
+            <!-- Social Signup -->
+            <div class="social-auth">
+                <p>Or sign up with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button class="social-btn facebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Illustration -->
+        <div class="auth-illustration">
+            <div class="illustration-content">
+                <i class="fas fa-seedling"></i>
+                <h2>Start Your Smart Farming Journey</h2>
+                <p>Get access to AI-powered tools designed specifically for modern farmers</p>
+                <ul class="benefits-list">
+                    <li><i class="fas fa-check"></i> Disease Detection</li>
+                    <li><i class="fas fa-check"></i> Weather Insights</li>
+                    <li><i class="fas fa-check"></i> Market Prices</li>
+                    <li><i class="fas fa-check"></i> AI Chat Assistant</li>
+                    <li><i class="fas fa-check"></i> Farm Analytics</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
