@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Log in to your Vuno account">
+    <title>Log In - Vuno Farming Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-box">
+            <!-- Header -->
+            <div class="auth-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>Vuno</span>
+                </a>
+                <h1>Welcome Back</h1>
+                <p>Log in to access your farming tools</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form" method="POST" action="AuthController.php">
+                <input type="hidden" name="action" value="login">
+
+                <!-- Email/Phone Input -->
+                <div class="form-group">
+                    <label for="email">Email or Phone Number</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input 
+                            type="text" 
+                            id="email" 
+                            name="email" 
+                            placeholder="your@email.com or +254 7XX XXX XXX"
+                            required
+                        >
+                    </div>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group">
+                    <div class="password-label-wrapper">
+                        <label for="password">Password</label>
+                        <a href="forgot-password.html" class="forgot-link">Forgot?</a>
+                    </div>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                        <i class="fas fa-eye toggle-password" data-target="password"></i>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="form-group checkbox">
+                    <input 
+                        type="checkbox" 
+                        id="remember" 
+                        name="remember"
+                    >
+                    <label for="remember">Keep me logged in</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary btn-full">
+                    <span id="submitText">Log In</span>
+                    <i class="fas fa-spinner fa-spin" id="submitSpinner" style="display: none; margin-left: 8px;"></i>
+                </button>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Login successful! Redirecting...</span>
+                </div>
+
+                <!-- Server Error Message -->
+                <div class="error-box" id="serverError" style="display: none;"></div>
+            </form>
+
+            <!-- Signup Link -->
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
+
+            <!-- Social Login -->
+            <div class="social-auth">
+                <p>Or log in with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button class="social-btn facebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Illustration -->
+        <div class="auth-illustration">
+            <div class="illustration-content">
+                <i class="fas fa-lock"></i>
+                <h2>Secure Access to Your Farm</h2>
+                <p>Your data is protected with industry-standard security measures</p>
+                <ul class="benefits-list">
+                    <li><i class="fas fa-shield-alt"></i> 256-bit Encryption</li>
+                    <li><i class="fas fa-lock"></i> Two-Factor Authentication</li>
+                    <li><i class="fas fa-check"></i> GDPR Compliant</li>
+                    <li><i class="fas fa-database"></i> Secure Cloud Storage</li>
+                    <li><i class="fas fa-sync-alt"></i> Real-time Backups</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
